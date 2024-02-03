@@ -8,19 +8,29 @@ import (
 )
 
 func (h *MainHandlers) signUp(c *gin.Context) {
-	var inputUser utils.UserDto
-	if err := c.BindJSON(&inputUser); err != nil {
-		logrus.Fatal(err.Error())
+	inputUser := &utils.UserDTO{}
+	if err := c.BindJSON(inputUser); err != nil {
+		logrus.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	id, err := h.services.CreateUser(inputUser)
+	id, err := h.services.CreateUser(c, inputUser)
 	if err != nil {
-		logrus.Fatal(err.Error())
+		logrus.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"id": id,
 	})
+}
+
+func (h *MainHandlers) signIn(c *gin.Context) {
+	inputUser := &utils.InputUser{}
+	if err := c.BindJSON(inputUser); err != nil {
+		logrus.Error(err.Error())
+		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"os"
@@ -15,9 +16,10 @@ func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 	err := godotenv.Load(".env")
 	if err != nil {
-		logrus.Fatal(err)
+		logrus.Fatal(err.Error())
 	}
-	db, err := database.NewPostgresDB(&database.ConfigDB{
+
+	db, err := database.NewPostgresDB(context.Background(), &database.ConfigDB{
 		Host:     os.Getenv("HOST"),
 		Port:     os.Getenv("PORT"),
 		Username: os.Getenv("USERNAME"),

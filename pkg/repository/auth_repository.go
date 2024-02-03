@@ -1,55 +1,109 @@
 package repository
 
 import (
+	"context"
 	"fmt"
-	"github.com/jmoiron/sqlx"
+	"github.com/jackc/pgx/v4/pgxpool"
+	"strings"
 	"vangram_api/pkg/database"
 	"vangram_api/utils"
 )
 
-type AuthRepositoryInterface interface {
-	Create(user utils.UserDto) (int, error)
-	Read(id int) (utils.UserDto, error)
-	Update(id int, user utils.UserDto) (utils.UserDto, error)
-	Delete(id int) (string, error)
+type AuthRepositoryProvider interface {
+	Create(ctx context.Context, user *utils.UserDTO) (int, error)
+	Read(ctx context.Context, id int) (utils.UserDTO, error)
+	Update(ctx context.Context, user *utils.UserDTO) ([]utils.UserDTO, error)
+	Delete(ctx context.Context, id int) (string, error)
 }
 
 type AuthRepository struct {
-	db *sqlx.DB
+	db *pgxpool.Pool
 }
 
-func NewAuth(db *sqlx.DB) *AuthRepository {
+func NewAuth(db *pgxpool.Pool) *AuthRepository {
 	return &AuthRepository{db: db}
 }
 
-func (ar *AuthRepository) Create(user utils.UserDto) (int, error) {
+func (ar *AuthRepository) Create(ctx context.Context, user *utils.UserDTO) (int, error) {
 	var id int
-	query := fmt.Sprintf("insert into %s (name) VALUES ($1) returning id", database.Client)
-	row := ar.db.QueryRow(query, user.Name)
+	query := fmt.Sprintf("insert into %s (name, surname) VALUES ($1, $2) returning id", database.Client)
+	row := ar.db.QueryRow(ctx, query, user.Name, user.Surname)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
 	}
 	return id, nil
 }
 
-func (ar *AuthRepository) Read(id int) (utils.UserDto, error) {
-	var user utils.UserDto
-	query := fmt.Sprintf("select id, name from %s where id=$1", database.Client)
-	if err := ar.db.Get(&user, query, id); err != nil {
-		return utils.UserDto{}, err
+func (ar *AuthRepository) Read(ctx context.Context, id int) (utils.UserDTO, error) {
+	var user utils.UserDTO
+	query := fmt.Sprintf("select id, name, surname from %s where id=$1", database.Client)
+	err := ar.db.QueryRow(ctx, query, id).Scan(&user.Id, &user.Name, &user.Surname)
+	if err != nil {
+		return utils.UserDTO{}, err
 	}
 	return user, nil
 }
 
-func (ar *AuthRepository) Update(id int, user utils.UserDto) (utils.UserDto, error) {
-	return utils.UserDto{}, nil
+func (ar *AuthRepository) Update(ctx context.Context, user *utils.UserDTO) ([]utils.UserDTO, error) {
+	tx, err := ar.db.Begin(ctx)
+	if err != nil {
+		return nil, err
+	}
+	setValues := make([]string, 0)
+	args := make([]interface{}, 0)
+	argId := 1
+	var newUsers []utils.UserDTO
+	if user.Name != nil {
+		setValues = append(setValues, fmt.Sprintf("name=$%d", argId))
+		args = append(args, *user.Name)
+		argId++
+	}
+	if user.Surname != nil {
+		setValues = append(setValues, fmt.Sprintf("surname=$%d", argId))
+		args = append(args, *user.Surname)
+		argId++
+	}
+
+	setQuery := strings.Join(setValues, ", ")
+	//setValues == "name=1, surname=2"
+
+	query := fmt.Sprintf("UPDATE %s SET %s WHERE id=$%d", database.Client, setQuery, argId)
+	args = append(args, user.Id)
+	_, err = ar.db.Exec(ctx, query, args...)
+	if err != nil {
+		tx.Rollback(ctx)
+		return newUsers, err
+	}
+
+	queryUsers := fmt.Sprintf("SELECT id, name, surname FROM %s", database.Client)
+	rows, err := ar.db.Query(ctx, queryUsers)
+	if err != nil {
+		tx.Rollback(ctx)
+		return nil, err
+	}
+	for rows.Next() {
+		var user utils.UserDTO
+		err := rows.Scan(user.Id, user.Name, user.Surname)
+		if err != nil {
+			return nil, err
+		}
+		newUsers = append(newUsers, user)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	err = tx.Commit(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return newUsers, nil
 }
 
-func (ar *AuthRepository) Delete(id int) (string, error) {
-	var query = fmt.Sprintf("delete from %s where id=$1", database.Client)
-	_, err := ar.db.Exec(query, id)
+func (ar *AuthRepository) Delete(ctx context.Context, id int) (string, error) {
+	query := fmt.Sprintf(`delete from %s where id=$1`, database.Client)
+	_, err := ar.db.Exec(ctx, query, id)
 	if err != nil {
 		return "", err
 	}
-	return "User was deleted", nil
+	return "User has been deleted", nil
 }

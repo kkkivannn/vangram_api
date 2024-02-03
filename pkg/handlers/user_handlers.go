@@ -8,16 +8,16 @@ import (
 )
 
 func (h *MainHandlers) getUser(c *gin.Context) {
-	var inputUser utils.UserDto
-	err := c.BindJSON(&inputUser)
+	inputUser := &utils.InputUser{}
+	err := c.BindJSON(inputUser)
 	if err != nil {
-		logrus.Fatal(err.Error())
+		logrus.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	user, err := h.services.GetUser(inputUser.Id)
+	user, err := h.services.GetUser(c, inputUser.Id)
 	if err != nil {
-		logrus.Fatal(err.Error())
+		logrus.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -25,15 +25,15 @@ func (h *MainHandlers) getUser(c *gin.Context) {
 }
 
 func (h *MainHandlers) deleteUser(c *gin.Context) {
-	var inputUser utils.UserDto
+	inputUser := &utils.InputUser{}
 	if err := c.BindJSON(&inputUser); err != nil {
-		logrus.Fatal(err.Error())
+		logrus.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	status, err := h.services.RemoveUser(inputUser.Id)
+	status, err := h.services.DeleteUser(c, inputUser.Id)
 	if err != nil {
-		logrus.Fatal(err.Error())
+		logrus.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
 		return
 	}

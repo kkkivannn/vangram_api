@@ -1,9 +1,10 @@
 package database
 
 import (
+	"context"
 	"fmt"
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
+	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -19,10 +20,11 @@ type ConfigDB struct {
 	SSLMode  string
 }
 
-func NewPostgresDB(config *ConfigDB) (*sqlx.DB, error) {
-	db, err := sqlx.Connect("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s", config.Host, config.Port, config.Username, config.DBName, config.Password, config.SSLMode))
+func NewPostgresDB(context context.Context, config *ConfigDB) (pool *pgxpool.Pool, err error) {
+	dbUrl := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s", config.Username, config.Password, config.Host, config.Port, config.DBName)
+	pool, err = pgxpool.Connect(context, dbUrl)
 	if err != nil {
-		return nil, err
+		logrus.Fatal(err.Error())
 	}
-	return db, nil
+	return pool, nil
 }
