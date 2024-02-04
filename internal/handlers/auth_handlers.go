@@ -8,7 +8,7 @@ import (
 )
 
 func (h *MainHandlers) signUp(c *gin.Context) {
-	inputUser := &utils.UserDTO{}
+	inputUser := &utils.Request{}
 	if err := c.BindJSON(inputUser); err != nil {
 		logrus.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())

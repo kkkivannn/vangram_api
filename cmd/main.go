@@ -6,10 +6,10 @@ import (
 	"github.com/sirupsen/logrus"
 	"os"
 	api "vangram_api"
-	"vangram_api/pkg/database"
-	"vangram_api/pkg/handlers"
-	"vangram_api/pkg/repository"
-	"vangram_api/pkg/service"
+	"vangram_api/internal/database"
+	"vangram_api/internal/handlers"
+	"vangram_api/internal/repository"
+	"vangram_api/internal/service"
 )
 
 func main() {
@@ -31,7 +31,7 @@ func main() {
 		logrus.Fatal("Неполучилось инициализировать бд: ", err.Error())
 	}
 
-	repositories := repository.NewAuth(db)
+	repositories := repository.NewAuthRepository(db)
 	services := service.NewAuthService(repositories)
 	mainHandlers := handlers.NewMainHandlers(services)
 
