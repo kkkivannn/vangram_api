@@ -2,43 +2,97 @@ package main
 
 import (
 	"context"
-	"github.com/joho/godotenv"
-	"github.com/sirupsen/logrus"
+	"log/slog"
+	"net/http"
 	"os"
-	api "vangram_api"
+	"os/signal"
+	"syscall"
+	"time"
+	"vangram_api/internal/config"
 	"vangram_api/internal/database"
 	"vangram_api/internal/handlers"
 	"vangram_api/internal/repository"
 	"vangram_api/internal/service"
 )
 
-func main() {
-	logrus.SetFormatter(new(logrus.JSONFormatter))
-	err := godotenv.Load(".env")
-	if err != nil {
-		logrus.Fatal(err.Error())
-	}
+const (
+	envLocal = "local"
+	envDev   = "dev"
+	envProd  = "prod"
+)
 
-	db, err := database.NewPostgresDB(context.Background(), &database.ConfigDB{
-		Host:     os.Getenv("HOST"),
-		Port:     os.Getenv("PORT"),
-		Username: os.Getenv("USERNAME"),
-		Password: os.Getenv("DB_PASSWORD"),
-		DBName:   os.Getenv("DBNAME"),
-		SSLMode:  os.Getenv("SSLMODE"),
-	})
+func main() {
+
+	cfg := config.MustLoad()
+	log := setupLogger(envLocal)
+	log.Info(
+		"starting vangram_api",
+		slog.String("env", cfg.Env),
+		slog.String("version", "123"),
+	)
+
+	log.Debug("debug messages are enabled")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	db, err := database.NewPostgresDB(ctx, cfg)
+
 	if err != nil {
-		logrus.Fatal("Неполучилось инициализировать бд: ", err.Error())
+		log.Error("Failed to init storage", err.Error())
+		os.Exit(1)
 	}
 
 	repositories := repository.NewAuthRepository(db)
+
 	services := service.NewAuthService(repositories)
+
 	mainHandlers := handlers.NewMainHandlers(services)
 
-	var server = new(api.Server)
+	done := make(chan os.Signal, 1)
 
-	if err := server.Run(os.Getenv("DB_PORT"), mainHandlers.InitHandlers()); err != nil {
-		logrus.Fatalf("Server not running: %s", err.Error())
+	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	srv := &http.Server{
+		Addr:         cfg.Address,
+		Handler:      mainHandlers.InitHandlers(),
+		ReadTimeout:  cfg.HTTPServer.Timeout,
+		WriteTimeout: cfg.HTTPServer.Timeout,
+		IdleTimeout:  cfg.HTTPServer.IdleTimeout,
 	}
 
+	go func() {
+		if err := srv.ListenAndServe(); err != nil {
+			log.Error("failed to start server")
+		}
+	}()
+
+	log.Info("server started")
+
+	<-done
+
+	log.Info("stopping server")
+
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Error("failed to stop server", err.Error())
+		return
+	}
+
+	db.Close()
+
+	log.Info("server stopped")
+}
+
+func setupLogger(env string) *slog.Logger {
+	var log *slog.Logger
+	switch env {
+	case envDev:
+		log = slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	case envProd:
+		log = slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
+	default:
+		log = slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
+	}
+
+	return log
 }

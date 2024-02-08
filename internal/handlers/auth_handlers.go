@@ -8,7 +8,7 @@ import (
 )
 
 func (h *MainHandlers) signUp(c *gin.Context) {
-	inputUser := &utils.Request{}
+	var inputUser utils.Request
 	if err := c.BindJSON(inputUser); err != nil {
 		logrus.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
@@ -26,7 +26,7 @@ func (h *MainHandlers) signUp(c *gin.Context) {
 }
 
 func (h *MainHandlers) signIn(c *gin.Context) {
-	inputUser := &utils.InputUser{}
+	var inputUser utils.InputUser
 	if err := c.BindJSON(inputUser); err != nil {
 		logrus.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())

@@ -8,7 +8,7 @@ import (
 )
 
 func (h *MainHandlers) getUser(c *gin.Context) {
-	inputUser := &utils.InputUser{}
+	var inputUser utils.InputUser
 	err := c.BindJSON(inputUser)
 	if err != nil {
 		logrus.Error(err.Error())
@@ -25,7 +25,7 @@ func (h *MainHandlers) getUser(c *gin.Context) {
 }
 
 func (h *MainHandlers) deleteUser(c *gin.Context) {
-	inputUser := &utils.InputUser{}
+	var inputUser utils.InputUser
 	if err := c.BindJSON(&inputUser); err != nil {
 		logrus.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())

@@ -7,9 +7,9 @@ import (
 )
 
 type AuthService interface {
-	CreateUser(ctx context.Context, user *utils.Request) (int, error)
+	CreateUser(ctx context.Context, user utils.Request) (int, error)
 	GetUser(ctx context.Context, id int) (utils.Request, error)
-	UpdateUser(ctx context.Context, user *utils.Request) ([]utils.Request, error)
+	UpdateUser(ctx context.Context, user utils.Request) ([]utils.Request, error)
 	DeleteUser(ctx context.Context, id int) (string, error)
 }
 

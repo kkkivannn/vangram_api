@@ -7,9 +7,9 @@ import (
 )
 
 type AuthRepository interface {
-	Create(ctx context.Context, user *utils.Request) (int, error)
+	Create(ctx context.Context, user utils.Request) (int, error)
 	Read(ctx context.Context, id int) (utils.Request, error)
-	Update(ctx context.Context, user *utils.Request) ([]utils.Request, error)
+	Update(ctx context.Context, user utils.Request) ([]utils.Request, error)
 	Delete(ctx context.Context, id int) (string, error)
 }
 
@@ -21,10 +21,10 @@ func NewAuthService(repository *repository.AuthorizeRepository) *AuthService {
 	return &AuthService{repository}
 }
 
-func (as *AuthService) CreateUser(ctx context.Context, user *utils.Request) (int, error) {
+func (as *AuthService) CreateUser(ctx context.Context, user utils.Request) (int, error) {
 	return as.repository.Create(ctx, user)
 }
-func (as *AuthService) UpdateUser(ctx context.Context, user *utils.Request) ([]utils.Request, error) {
+func (as *AuthService) UpdateUser(ctx context.Context, user utils.Request) ([]utils.Request, error) {
 	return as.repository.Update(ctx, user)
 }
 

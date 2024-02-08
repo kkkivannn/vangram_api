@@ -17,7 +17,7 @@ func NewAuthRepository(db *pgxpool.Pool) *AuthorizeRepository {
 	return &AuthorizeRepository{db: db}
 }
 
-func (ar *AuthorizeRepository) Create(ctx context.Context, user *utils.Request) (int, error) {
+func (ar *AuthorizeRepository) Create(ctx context.Context, user utils.Request) (int, error) {
 	var id int
 	query := fmt.Sprintf("insert into %s (name, surname) VALUES ($1, $2) returning id", database.Client)
 	row := ar.db.QueryRow(ctx, query, user.Name, user.Surname)
@@ -37,7 +37,7 @@ func (ar *AuthorizeRepository) Read(ctx context.Context, id int) (utils.Request,
 	return user, nil
 }
 
-func (ar *AuthorizeRepository) Update(ctx context.Context, user *utils.Request) ([]utils.Request, error) {
+func (ar *AuthorizeRepository) Update(ctx context.Context, user utils.Request) ([]utils.Request, error) {
 	tx, err := ar.db.Begin(ctx)
 	if err != nil {
 		return nil, err
