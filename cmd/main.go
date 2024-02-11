@@ -37,13 +37,13 @@ func main() {
 
 	services := service.NewAuthService(repositories)
 
-	mainHandlers := handlers.NewMainHandlers(services)
+	mainHandlers := handlers.New(services)
 
 	done := make(chan os.Signal, 1)
 
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
-	srv := server.New(cfg, mainHandlers.InitHandlers())
+	srv := server.New(cfg, mainHandlers.Init())
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil {

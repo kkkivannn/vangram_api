@@ -6,7 +6,8 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 	"strings"
 	"vangram_api/internal/database"
-	"vangram_api/utils"
+	"vangram_api/internal/handlers"
+	"vangram_api/internal/lib/api/response"
 )
 
 type AuthorizeRepository struct {
@@ -17,7 +18,7 @@ func NewAuthRepository(db *pgxpool.Pool) *AuthorizeRepository {
 	return &AuthorizeRepository{db: db}
 }
 
-func (ar *AuthorizeRepository) Create(ctx context.Context, user utils.Request) (int, error) {
+func (ar *AuthorizeRepository) Create(ctx context.Context, user handlers.RequestCreateUser) (int, error) {
 	var id int
 	query := fmt.Sprintf("insert into %s (name, surname) VALUES ($1, $2) returning id", database.Client)
 	row := ar.db.QueryRow(ctx, query, user.Name, user.Surname)
@@ -27,17 +28,17 @@ func (ar *AuthorizeRepository) Create(ctx context.Context, user utils.Request) (
 	return id, nil
 }
 
-func (ar *AuthorizeRepository) Read(ctx context.Context, id int) (utils.Request, error) {
-	var user utils.Request
+func (ar *AuthorizeRepository) Read(ctx context.Context, id int) (response.UserResponse, error) {
+	var user response.UserResponse
 	query := fmt.Sprintf("select id, name, surname from %s where id=$1", database.Client)
-	err := ar.db.QueryRow(ctx, query, id).Scan(&user.Id, &user.Name, &user.Surname)
+	err := ar.db.QueryRow(ctx, query, id).Scan(&user.ID, &user.Name, &user.Surname)
 	if err != nil {
-		return utils.Request{}, err
+		return response.UserResponse{}, err
 	}
 	return user, nil
 }
 
-func (ar *AuthorizeRepository) Update(ctx context.Context, user utils.Request) ([]utils.Request, error) {
+func (ar *AuthorizeRepository) Update(ctx context.Context, user handlers.RequestUpdateUser) ([]handlers.RequestUpdateUser, error) {
 	tx, err := ar.db.Begin(ctx)
 	if err != nil {
 		return nil, err
@@ -45,7 +46,7 @@ func (ar *AuthorizeRepository) Update(ctx context.Context, user utils.Request) (
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
 	argId := 1
-	var newUsers []utils.Request
+	var newUsers []handlers.RequestUpdateUser
 	if user.Name != nil {
 		setValues = append(setValues, fmt.Sprintf("name=$%d", argId))
 		args = append(args, *user.Name)
@@ -60,7 +61,7 @@ func (ar *AuthorizeRepository) Update(ctx context.Context, user utils.Request) (
 	setQuery := strings.Join(setValues, ", ")
 
 	query := fmt.Sprintf("UPDATE %s SET %s WHERE id=$%d", database.Client, setQuery, argId)
-	args = append(args, user.Id)
+	args = append(args, user.ID)
 	_, err = ar.db.Exec(ctx, query, args...)
 	if err != nil {
 		err := tx.Rollback(ctx)
@@ -80,8 +81,8 @@ func (ar *AuthorizeRepository) Update(ctx context.Context, user utils.Request) (
 		return nil, err
 	}
 	for rows.Next() {
-		var user utils.Request
-		err := rows.Scan(user.Id, user.Name, user.Surname)
+		var user handlers.RequestUpdateUser
+		err := rows.Scan(user.ID, user.Name, user.Surname)
 		if err != nil {
 			return nil, err
 		}

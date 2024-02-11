@@ -1,15 +1,24 @@
 package handlers
 
 import (
+	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"net/http"
-	"vangram_api/utils"
 )
 
-func (h *MainHandlers) signUp(c *gin.Context) {
-	var inputUser utils.Request
-	if err := c.BindJSON(inputUser); err != nil {
+type CreateUser interface {
+	CreateUser(ctx context.Context, user RequestCreateUser) (int, error)
+}
+
+type RequestCreateUser struct {
+	Name    string `json:"name"`
+	Surname string `json:"surname"`
+}
+
+func (h *Handlers) signUp(c *gin.Context) {
+	var inputUser RequestCreateUser
+	if err := c.BindJSON(&inputUser); err != nil {
 		logrus.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return
