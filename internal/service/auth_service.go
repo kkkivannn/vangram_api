@@ -12,6 +12,7 @@ type AuthRepository interface {
 	Read(ctx context.Context, id int) (response.UserResponse, error)
 	Update(ctx context.Context, user handlers.RequestUpdateUser) ([]handlers.RequestUpdateUser, error)
 	Delete(ctx context.Context, id int) (string, error)
+	GetAll(ctx context.Context) ([]response.UserResponse, error)
 }
 
 type AuthService struct {
@@ -35,4 +36,8 @@ func (as *AuthService) DeleteUser(ctx context.Context, userId int) (string, erro
 
 func (as *AuthService) GetUser(ctx context.Context, userId int) (response.UserResponse, error) {
 	return as.repository.Read(ctx, userId)
+}
+
+func (as *AuthService) GetAllUsers(ctx context.Context) ([]response.UserResponse, error) {
+	return as.repository.GetAll(ctx)
 }

@@ -11,6 +11,7 @@ type AuthService interface {
 	GetUser(ctx context.Context, id int) (response.UserResponse, error)
 	UpdateUser(ctx context.Context, user RequestUpdateUser) ([]RequestUpdateUser, error)
 	DeleteUser(ctx context.Context, id int) (string, error)
+	GetAllUsers(ctx context.Context) ([]response.UserResponse, error)
 }
 
 type Handlers struct {
@@ -35,6 +36,7 @@ func (h *Handlers) Init() *gin.Engine {
 			user.GET("", h.getUser)
 			user.DELETE("", h.deleteUser)
 		}
+		api.GET("/users", h.getAllUsers)
 	}
 	return router
 }
