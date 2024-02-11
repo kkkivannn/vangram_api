@@ -106,3 +106,25 @@ func (ar *AuthorizeRepository) Delete(ctx context.Context, id int) (string, erro
 	}
 	return "User has been deleted", nil
 }
+
+func (ar *AuthorizeRepository) GetAll(ctx context.Context) ([]response.UserResponse, error) {
+	var users []response.UserResponse
+	query := fmt.Sprintf("SELECT id, name, surname FROM %s", database.Client)
+	rows, err := ar.db.Query(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var user response.UserResponse
+		err := rows.Scan(user.ID, user.Name, user.Surname)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return users, nil
+}
