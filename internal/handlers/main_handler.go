@@ -23,6 +23,7 @@ func NewMainHandlers(services AuthService) *MainHandlers {
 
 func (h *MainHandlers) InitHandlers() *gin.Engine {
 	router := gin.New()
+
 	api := router.Group("/api")
 	{
 		auth := api.Group("/auth")

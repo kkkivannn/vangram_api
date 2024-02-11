@@ -63,14 +63,20 @@ func (ar *AuthorizeRepository) Update(ctx context.Context, user utils.Request) (
 	args = append(args, user.Id)
 	_, err = ar.db.Exec(ctx, query, args...)
 	if err != nil {
-		tx.Rollback(ctx)
+		err := tx.Rollback(ctx)
+		if err != nil {
+			return nil, err
+		}
 		return newUsers, err
 	}
 
 	queryUsers := fmt.Sprintf("SELECT id, name, surname FROM %s", database.Client)
 	rows, err := ar.db.Query(ctx, queryUsers)
 	if err != nil {
-		tx.Rollback(ctx)
+		err := tx.Rollback(ctx)
+		if err != nil {
+			return nil, err
+		}
 		return nil, err
 	}
 	for rows.Next() {

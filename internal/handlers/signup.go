@@ -24,13 +24,3 @@ func (h *MainHandlers) signUp(c *gin.Context) {
 		"id": id,
 	})
 }
-
-func (h *MainHandlers) signIn(c *gin.Context) {
-	var inputUser utils.InputUser
-	if err := c.BindJSON(inputUser); err != nil {
-		logrus.Error(err.Error())
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
-		return
-	}
-
-}
