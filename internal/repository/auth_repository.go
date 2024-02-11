@@ -116,7 +116,7 @@ func (ar *AuthorizeRepository) GetAll(ctx context.Context) ([]response.UserRespo
 	}
 	for rows.Next() {
 		var user response.UserResponse
-		err := rows.Scan(user.ID, user.Name, user.Surname)
+		err := rows.Scan(&user.ID, &user.Name, &user.Surname)
 		if err != nil {
 			return nil, err
 		}
