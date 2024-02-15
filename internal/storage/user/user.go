@@ -1,4 +1,4 @@
-package repository
+package user
 
 import (
 	"context"
@@ -7,18 +7,18 @@ import (
 	"strings"
 	"vangram_api/internal/database"
 	"vangram_api/internal/handlers"
-	"vangram_api/internal/lib/api/response"
+	"vangram_api/internal/service/response"
 )
 
-type AuthorizeRepository struct {
+type Storage struct {
 	db *pgxpool.Pool
 }
 
-func NewAuthRepository(db *pgxpool.Pool) *AuthorizeRepository {
-	return &AuthorizeRepository{db: db}
+func New(db *pgxpool.Pool) *Storage {
+	return &Storage{db: db}
 }
 
-func (ar *AuthorizeRepository) Create(ctx context.Context, user handlers.RequestCreateUser) (int, error) {
+func (ar *Storage) CreateUser(ctx context.Context, user handlers.RequestCreateUser) (int, error) {
 	var id int
 	query := fmt.Sprintf("insert into %s (name, surname) VALUES ($1, $2) returning id", database.Client)
 	row := ar.db.QueryRow(ctx, query, user.Name, user.Surname)
@@ -28,7 +28,7 @@ func (ar *AuthorizeRepository) Create(ctx context.Context, user handlers.Request
 	return id, nil
 }
 
-func (ar *AuthorizeRepository) Read(ctx context.Context, id int) (response.UserResponse, error) {
+func (ar *Storage) ReadUser(ctx context.Context, id int) (response.UserResponse, error) {
 	var user response.UserResponse
 	query := fmt.Sprintf("select id, name, surname from %s where id=$1", database.Client)
 	err := ar.db.QueryRow(ctx, query, id).Scan(&user.ID, &user.Name, &user.Surname)
@@ -38,7 +38,7 @@ func (ar *AuthorizeRepository) Read(ctx context.Context, id int) (response.UserR
 	return user, nil
 }
 
-func (ar *AuthorizeRepository) Update(ctx context.Context, user handlers.RequestUpdateUser) ([]handlers.RequestUpdateUser, error) {
+func (ar *Storage) UpdateUser(ctx context.Context, user handlers.RequestUpdateUser) ([]handlers.RequestUpdateUser, error) {
 	tx, err := ar.db.Begin(ctx)
 	if err != nil {
 		return nil, err
@@ -98,7 +98,7 @@ func (ar *AuthorizeRepository) Update(ctx context.Context, user handlers.Request
 	return newUsers, nil
 }
 
-func (ar *AuthorizeRepository) Delete(ctx context.Context, id int) (string, error) {
+func (ar *Storage) DeleteUser(ctx context.Context, id int) (string, error) {
 	query := fmt.Sprintf(`delete from %s where id=$1`, database.Client)
 	_, err := ar.db.Exec(ctx, query, id)
 	if err != nil {
@@ -107,7 +107,7 @@ func (ar *AuthorizeRepository) Delete(ctx context.Context, id int) (string, erro
 	return "User has been deleted", nil
 }
 
-func (ar *AuthorizeRepository) GetAll(ctx context.Context) ([]response.UserResponse, error) {
+func (ar *Storage) GetAllUsers(ctx context.Context) ([]response.UserResponse, error) {
 	var users []response.UserResponse
 	query := fmt.Sprintf("SELECT id, name, surname FROM %s", database.Client)
 	rows, err := ar.db.Query(ctx, query)

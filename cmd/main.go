@@ -11,9 +11,9 @@ import (
 	"vangram_api/internal/database"
 	"vangram_api/internal/handlers"
 	"vangram_api/internal/lib/logger"
-	"vangram_api/internal/repository"
 	"vangram_api/internal/server"
-	"vangram_api/internal/service"
+	userService "vangram_api/internal/service/user"
+	userStorage "vangram_api/internal/storage/user"
 )
 
 func main() {
@@ -33,9 +33,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	repositories := repository.NewAuthRepository(db)
+	repositories := userStorage.New(db)
 
-	services := service.NewAuthService(repositories)
+	services := userService.New(repositories)
 
 	mainHandlers := handlers.New(services)
 

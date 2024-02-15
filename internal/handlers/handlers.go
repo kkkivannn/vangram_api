@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	"vangram_api/internal/lib/api/response"
+	"vangram_api/internal/service/response"
 )
 
 type AuthService interface {
@@ -14,15 +14,15 @@ type AuthService interface {
 	GetAllUsers(ctx context.Context) ([]response.UserResponse, error)
 }
 
-type Handlers struct {
-	services AuthService
+type Handler struct {
+	service AuthService
 }
 
-func New(services AuthService) *Handlers {
-	return &Handlers{services: services}
+func New(services AuthService) *Handler {
+	return &Handler{service: services}
 }
 
-func (h *Handlers) Init() *gin.Engine {
+func (h *Handler) Init() *gin.Engine {
 	router := gin.New()
 
 	api := router.Group("/api")
