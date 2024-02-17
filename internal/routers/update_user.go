@@ -1,4 +1,4 @@
-package handlers
+package routers
 
 type RequestUpdateUser struct {
 	ID      int     `json:"id"`

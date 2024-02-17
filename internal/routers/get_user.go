@@ -1,4 +1,4 @@
-package handlers
+package routers
 
 import (
 	"github.com/gin-gonic/gin"
@@ -10,7 +10,7 @@ type RequestGetUser struct {
 	ID int `json:"id"`
 }
 
-func (h *Handler) getUser(c *gin.Context) {
+func (r *Route) getUser(c *gin.Context) {
 	var request RequestGetUser
 	err := c.BindJSON(&request)
 	if err != nil {
@@ -18,7 +18,7 @@ func (h *Handler) getUser(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	user, err := h.service.GetUser(c, request.ID)
+	user, err := r.service.GetUser(c, request.ID)
 	if err != nil {
 		slog.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())

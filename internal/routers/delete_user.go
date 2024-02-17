@@ -1,4 +1,4 @@
-package handlers
+package routers
 
 import (
 	"github.com/gin-gonic/gin"
@@ -10,14 +10,14 @@ type RequestDeleteUser struct {
 	ID int `json:"id"`
 }
 
-func (h *Handler) deleteUser(c *gin.Context) {
+func (r *Route) deleteUser(c *gin.Context) {
 	var request RequestDeleteUser
 	if err := c.BindJSON(&request); err != nil {
 		logrus.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	status, err := h.service.DeleteUser(c, request.ID)
+	status, err := r.service.DeleteUser(c, request.ID)
 	if err != nil {
 		logrus.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())

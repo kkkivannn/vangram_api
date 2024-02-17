@@ -6,8 +6,7 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 	"strings"
 	"vangram_api/internal/database"
-	"vangram_api/internal/handlers"
-	"vangram_api/internal/service/response"
+	"vangram_api/internal/service"
 )
 
 type Storage struct {
@@ -18,35 +17,35 @@ func New(db *pgxpool.Pool) *Storage {
 	return &Storage{db: db}
 }
 
-func (ar *Storage) CreateUser(ctx context.Context, user handlers.RequestCreateUser) (int, error) {
+func (s *Storage) CreateUser(ctx context.Context, user service.RequestUser) (int, error) {
 	var id int
-	query := fmt.Sprintf("insert into %s (name, surname) VALUES ($1, $2) returning id", database.Client)
-	row := ar.db.QueryRow(ctx, query, user.Name, user.Surname)
+	query := fmt.Sprintf("INSERT INTO %s (name, surname) VALUES ($1, $2) returning id", database.Client)
+	row := s.db.QueryRow(ctx, query, user.Name, user.Surname)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
 	}
 	return id, nil
 }
 
-func (ar *Storage) ReadUser(ctx context.Context, id int) (response.UserResponse, error) {
-	var user response.UserResponse
-	query := fmt.Sprintf("select id, name, surname from %s where id=$1", database.Client)
-	err := ar.db.QueryRow(ctx, query, id).Scan(&user.ID, &user.Name, &user.Surname)
+func (s *Storage) ReadUser(ctx context.Context, id int) (service.User, error) {
+	var user service.User
+	query := fmt.Sprintf("SELECT id, name, surname FROM %s WHERE id=$1", database.Client)
+	err := s.db.QueryRow(ctx, query, id).Scan(&user.ID, &user.Name, &user.Surname)
 	if err != nil {
-		return response.UserResponse{}, err
+		return service.User{}, err
 	}
 	return user, nil
 }
 
-func (ar *Storage) UpdateUser(ctx context.Context, user handlers.RequestUpdateUser) ([]handlers.RequestUpdateUser, error) {
-	tx, err := ar.db.Begin(ctx)
+func (s *Storage) UpdateUser(ctx context.Context, user service.User) ([]service.User, error) {
+	tx, err := s.db.Begin(ctx)
 	if err != nil {
 		return nil, err
 	}
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
 	argId := 1
-	var newUsers []handlers.RequestUpdateUser
+	var newUsers []service.User
 	if user.Name != nil {
 		setValues = append(setValues, fmt.Sprintf("name=$%d", argId))
 		args = append(args, *user.Name)
@@ -62,7 +61,7 @@ func (ar *Storage) UpdateUser(ctx context.Context, user handlers.RequestUpdateUs
 
 	query := fmt.Sprintf("UPDATE %s SET %s WHERE id=$%d", database.Client, setQuery, argId)
 	args = append(args, user.ID)
-	_, err = ar.db.Exec(ctx, query, args...)
+	_, err = s.db.Exec(ctx, query, args...)
 	if err != nil {
 		err := tx.Rollback(ctx)
 		if err != nil {
@@ -72,7 +71,7 @@ func (ar *Storage) UpdateUser(ctx context.Context, user handlers.RequestUpdateUs
 	}
 
 	queryUsers := fmt.Sprintf("SELECT id, name, surname FROM %s", database.Client)
-	rows, err := ar.db.Query(ctx, queryUsers)
+	rows, err := s.db.Query(ctx, queryUsers)
 	if err != nil {
 		err := tx.Rollback(ctx)
 		if err != nil {
@@ -81,7 +80,7 @@ func (ar *Storage) UpdateUser(ctx context.Context, user handlers.RequestUpdateUs
 		return nil, err
 	}
 	for rows.Next() {
-		var user handlers.RequestUpdateUser
+		var user service.User
 		err := rows.Scan(user.ID, user.Name, user.Surname)
 		if err != nil {
 			return nil, err
@@ -98,24 +97,24 @@ func (ar *Storage) UpdateUser(ctx context.Context, user handlers.RequestUpdateUs
 	return newUsers, nil
 }
 
-func (ar *Storage) DeleteUser(ctx context.Context, id int) (string, error) {
-	query := fmt.Sprintf(`delete from %s where id=$1`, database.Client)
-	_, err := ar.db.Exec(ctx, query, id)
+func (s *Storage) DeleteUser(ctx context.Context, id int) (string, error) {
+	query := fmt.Sprintf(`DELETE FROM %s WHERE id=$1`, database.Client)
+	_, err := s.db.Exec(ctx, query, id)
 	if err != nil {
 		return "", err
 	}
 	return "User has been deleted", nil
 }
 
-func (ar *Storage) GetAllUsers(ctx context.Context) ([]response.UserResponse, error) {
-	var users []response.UserResponse
+func (s *Storage) GetAllUsers(ctx context.Context) ([]service.User, error) {
+	var users []service.User
 	query := fmt.Sprintf("SELECT id, name, surname FROM %s", database.Client)
-	rows, err := ar.db.Query(ctx, query)
+	rows, err := s.db.Query(ctx, query)
 	if err != nil {
 		return nil, err
 	}
 	for rows.Next() {
-		var user response.UserResponse
+		var user service.User
 		err := rows.Scan(&user.ID, &user.Name, &user.Surname)
 		if err != nil {
 			return nil, err

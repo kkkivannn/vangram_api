@@ -5,32 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d0908c55-6673-4b56-a8dc-efb80597a2df" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/internal/service/post/post_service.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/response/post_response.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/user/user_service.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/storage/post/post.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.fleet/settings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/routers/route.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/service/models.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/config/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/postgres.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/postgres.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/handlers/delete_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/handlers/delete_user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/handlers/get_all_users.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/handlers/get_all_users.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/handlers/get_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/handlers/get_user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/handlers/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/handlers/handlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/handlers/sign_in.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/handlers/sign_in.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/handlers/sign_up.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/handlers/sign_up.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/handlers/update_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/handlers/update_user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/lib/api/response/get_user_response.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/response/user_response.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/auth_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/storage/user/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/auth_service.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/handlers/delete_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/routers/delete_user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/handlers/get_all_users.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/routers/get_all_users.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/handlers/get_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/routers/get_user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/handlers/handlers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/handlers/sign_in.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/routers/sign_in.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/handlers/sign_up.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/routers/sign_up.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/handlers/update_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/routers/update_user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user/user_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user_service/user_service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/storage/user/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/storage/user/user.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +49,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultGoTemplateProperty": "Go File",
-    "Go Build.go build vangram_api/cmd.executor": "Run",
+    "Go Build.go build vangram_api/cmd.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
@@ -77,6 +64,11 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.pluginManager"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
   }
 }]]></component>
   <component name="RecentsManager">
