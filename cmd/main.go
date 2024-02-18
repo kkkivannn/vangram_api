@@ -8,12 +8,12 @@ import (
 	"syscall"
 	"time"
 	"vangram_api/internal/config"
-	"vangram_api/internal/database"
-	"vangram_api/internal/lib/logger"
-	"vangram_api/internal/routers"
-	"vangram_api/internal/server"
-	"vangram_api/internal/service/user_service"
-	"vangram_api/internal/storage/user"
+	"vangram_api/internal/http"
+	"vangram_api/internal/http/handlers"
+	"vangram_api/internal/postgres"
+	"vangram_api/internal/service/user"
+	"vangram_api/internal/storage"
+	"vangram_api/pkg/logger"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	db, err := database.NewPostgresDB(ctx, cfg)
+	db, err := postgres.NewPostgresDB(ctx, cfg)
 	defer db.Close()
 
 	if err != nil {
@@ -33,16 +33,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	userStorage := user.New(db)
-	userService := user_service.New(userStorage)
+	userStorage := storage.NewUserStorage(db)
+	userService := user.New(userStorage)
 
-	router := routers.New(userService)
+	route := handlers.New(userService)
 
 	done := make(chan os.Signal, 1)
 
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
-	srv := server.New(cfg, router.InitRoutes())
+	srv := http.New(cfg, route.InitRoutes())
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil {

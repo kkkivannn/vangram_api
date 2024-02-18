@@ -1,4 +1,4 @@
-package service
+package user
 
 type User struct {
 	ID      *int    `json:"id,omitempty"`

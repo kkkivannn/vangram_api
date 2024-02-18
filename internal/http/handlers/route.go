@@ -1,17 +1,18 @@
-package routers
+package handlers
 
 import (
 	"context"
+	"vangram_api/internal/service/user"
+
 	"github.com/gin-gonic/gin"
-	"vangram_api/internal/service"
 )
 
 type UserService interface {
-	CreateUser(ctx context.Context, user service.RequestUser) (int, error)
-	GetUser(ctx context.Context, id int) (service.User, error)
-	UpdateUser(ctx context.Context, user service.User) ([]service.User, error)
+	CreateUser(ctx context.Context, user user.RequestUser) (int, error)
+	GetUser(ctx context.Context, id int) (user.User, error)
+	UpdateUser(ctx context.Context, user user.User) ([]user.User, error)
 	DeleteUser(ctx context.Context, id int) (string, error)
-	GetAllUsers(ctx context.Context) ([]service.User, error)
+	GetAllUsers(ctx context.Context) ([]user.User, error)
 }
 
 type Route struct {
