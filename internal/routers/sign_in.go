@@ -1,4 +1,4 @@
-package handlers
+package routers
 
 //
 //import (
@@ -8,7 +8,7 @@ package handlers
 //	"vangram_api/utils"
 //)
 //
-//func (h *Handlers) signIn(c *gin.Context) {
+//func (h *Handler) signIn(c *gin.Context) {
 //	var inputUser utils.InputUser
 //	if err := c.BindJSON(&inputUser); err != nil {
 //		logrus.Error(err.Error())

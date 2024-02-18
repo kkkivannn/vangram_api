@@ -9,11 +9,11 @@ import (
 	"time"
 	"vangram_api/internal/config"
 	"vangram_api/internal/database"
-	"vangram_api/internal/handlers"
 	"vangram_api/internal/lib/logger"
-	"vangram_api/internal/repository"
+	"vangram_api/internal/routers"
 	"vangram_api/internal/server"
-	"vangram_api/internal/service"
+	"vangram_api/internal/service/user_service"
+	"vangram_api/internal/storage/user"
 )
 
 func main() {
@@ -29,21 +29,20 @@ func main() {
 	defer db.Close()
 
 	if err != nil {
-		log.Error("Failed to init storage", err.Error())
+		log.Error("Failed to init userStorage", err.Error())
 		os.Exit(1)
 	}
 
-	repositories := repository.NewAuthRepository(db)
+	userStorage := user.New(db)
+	userService := user_service.New(userStorage)
 
-	services := service.NewAuthService(repositories)
-
-	mainHandlers := handlers.New(services)
+	router := routers.New(userService)
 
 	done := make(chan os.Signal, 1)
 
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
-	srv := server.New(cfg, mainHandlers.Init())
+	srv := server.New(cfg, router.InitRoutes())
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil {
