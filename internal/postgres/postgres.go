@@ -1,11 +1,12 @@
-package database
+package postgres
 
 import (
 	"context"
 	"fmt"
-	"github.com/jackc/pgx/v4/pgxpool"
 	"log"
 	"vangram_api/internal/config"
+
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 const (

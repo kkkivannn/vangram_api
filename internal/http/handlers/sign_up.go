@@ -1,10 +1,11 @@
-package routers
+package handlers
 
 import (
+	"net/http"
+	"vangram_api/internal/service/user"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"net/http"
-	"vangram_api/internal/service"
 )
 
 type RequestCreateUser struct {
@@ -13,7 +14,7 @@ type RequestCreateUser struct {
 }
 
 func (r *Route) signUp(c *gin.Context) {
-	var inputUser service.RequestUser
+	var inputUser user.RequestUser
 	if err := c.BindJSON(&inputUser); err != nil {
 		logrus.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())

@@ -1,9 +1,10 @@
-package routers
+package handlers
 
 import (
-	"github.com/gin-gonic/gin"
 	"log/slog"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func (r *Route) getAllUsers(c *gin.Context) {
