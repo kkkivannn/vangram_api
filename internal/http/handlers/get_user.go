@@ -11,7 +11,7 @@ type RequestGetUser struct {
 	ID int `json:"id"`
 }
 
-func (r *Route) getUser(c *gin.Context) {
+func (h *Handler) getUser(c *gin.Context) {
 	var request RequestGetUser
 	err := c.BindJSON(&request)
 	if err != nil {
@@ -19,11 +19,12 @@ func (r *Route) getUser(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	user, err := r.service.GetUser(c, request.ID)
+	user, err := h.userService.GetUser(c, request.ID)
 	if err != nil {
 		slog.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 	c.JSON(http.StatusOK, user)
+	return
 }

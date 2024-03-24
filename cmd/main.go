@@ -10,9 +10,10 @@ import (
 	"vangram_api/internal/config"
 	"vangram_api/internal/http"
 	"vangram_api/internal/http/handlers"
-	"vangram_api/internal/postgres"
+	"vangram_api/internal/service/post"
 	"vangram_api/internal/service/user"
 	"vangram_api/internal/storage"
+	"vangram_api/internal/storage/postgres"
 	"vangram_api/pkg/logger"
 )
 
@@ -29,14 +30,17 @@ func main() {
 	defer db.Close()
 
 	if err != nil {
-		log.Error("Failed to init userStorage", err.Error())
+		slog.Error("Failed to init userStorage", err.Error())
 		os.Exit(1)
 	}
 
 	userStorage := storage.NewUserStorage(db)
 	userService := user.New(userStorage)
 
-	route := handlers.New(userService)
+	postStorage := storage.NewPostStorage(db)
+	postService := post.NewService(postStorage)
+
+	route := handlers.New(userService, postService)
 
 	done := make(chan os.Signal, 1)
 
@@ -48,16 +52,16 @@ func main() {
 		if err := srv.ListenAndServe(); err != nil {
 			log.Error("failed to start server")
 		}
-		log.Info("server started")
+		slog.Info("server started")
 	}()
 
 	<-done
-	log.Info("stopping server")
+	slog.Info("stopping server")
 
 	if err := srv.Shutdown(ctx); err != nil {
-		log.Error("failed to stop server", err.Error())
+		slog.Error("failed to stop server", err.Error())
 		return
 	}
 
-	log.Info("server stopped")
+	slog.Info("server stopped")
 }

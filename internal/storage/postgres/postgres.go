@@ -10,7 +10,10 @@ import (
 )
 
 const (
-	Client = "Client"
+	User          = `"User"`
+	UsersTokens   = `"Users_tokens"`
+	Post          = `"Post"`
+	LikeUsersPost = `"Like_users_post"`
 )
 
 func NewPostgresDB(context context.Context, config *config.Config) (pool *pgxpool.Pool, err error) {
