@@ -9,3 +9,6 @@ services:
       - POSTGRES_PASSWORD=root
       - POSTGRES_USER=admin
     image: postgres:16.0-alpine
+
+
+

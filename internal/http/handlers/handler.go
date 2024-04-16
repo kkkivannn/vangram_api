@@ -46,6 +46,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router.Static("/image", "./")
 	api := router.Group("/api")
 	{
+		//Методы авторизации
 		auth := api.Group("/auth")
 		{
 			auth.POST("/send_number", h.sendNumber)
@@ -54,15 +55,19 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			auth.Use(middleware.Identity)
 			auth.POST("/signOut", h.signOut)
 		}
+		//Мидлваре для индетификации и проверки пользователя на авторизацию
 		api.Use(middleware.Identity)
+		//Методы для работы с пользователем
 		u := api.Group("/user")
 		{
 			u.GET("", h.getUser)
 			u.DELETE("", h.deleteUser)
 			u.PATCH("", h.updateUser)
+			u.GET("/profile", h.getProfile)
 
 		}
 		api.GET("/users", h.getAllUsers)
+		//Методы для работы с постами
 		post := api.Group("/post")
 		{
 			post.POST("", h.createPost)

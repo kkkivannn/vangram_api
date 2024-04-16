@@ -6,9 +6,9 @@ import (
 )
 
 type User struct {
-	ID      *int    `json:"id,omitempty" db:"id"`
-	Name    *string `json:"name,omitempty" db:"name"`
-	Surname *string `json:"surname,omitempty" db:"surname"`
+	ID      int     `json:"id,omitempty" db:"id"`
+	Name    string  `json:"name" db:"name"`
+	Surname string  `json:"surname" db:"surname"`
 	Age     int     `json:"age,omitempty"`
 	Phone   string  `json:"phone,omitempty"`
 	Photo   *string `json:"photo" db:"photo"`

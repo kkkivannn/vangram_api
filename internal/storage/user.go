@@ -30,11 +30,16 @@ func (s *UserStorage) CreateUser(ctx context.Context, user user.SaveUser) (int, 
 
 func (s *UserStorage) ReadUser(ctx context.Context, id int) (user.User, error) {
 	var resp user.User
-	query := fmt.Sprintf("SELECT id, name, surname, age, phone_number FROM %s WHERE id=$1", postgres.User)
-	err := s.db.QueryRow(ctx, query, id).Scan(&resp.ID, &resp.Name, &resp.Surname, &resp.Age, &resp.Phone)
+	query := fmt.Sprintf("SELECT id, name, surname, age, phone_number, photo FROM %s WHERE id=$1", postgres.User)
+	err := s.db.QueryRow(ctx, query, id).Scan(&resp.ID, &resp.Name, &resp.Surname, &resp.Age, &resp.Phone, &resp.Photo)
 	if err != nil {
 		return user.User{}, err
 	}
+	if resp.Photo != nil {
+		photo := fmt.Sprintf("%s%s", url, *resp.Photo)
+		resp.Photo = &photo
+	}
+
 	return resp, nil
 }
 
@@ -67,45 +72,7 @@ func (s *UserStorage) UpdateUser(ctx context.Context, reqUser user.SaveUser, use
 	//	args = append(args, *u.Surname)
 	//	argId++
 	//}
-	//
-	//setQuery := strings.Join(setValues, ", ")
-	//
-	//query := fmt.Sprintf("UPDATE %s SET %s WHERE id=$%d", postgres.User, setQuery, argId)
-	//args = append(args, reqUser.ID)
-	//_, err = s.db.Exec(ctx, query, args...)
-	//if err != nil {
-	//	err := tx.Rollback(ctx)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//	return newUsers, err
-	//}
-	//
-	//queryUsers := fmt.Sprintf("SELECT id, name, surname FROM %s", postgres.User)
-	//rows, err := s.db.Query(ctx, queryUsers)
-	//if err != nil {
-	//	err := tx.Rollback(ctx)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//	return nil, err
-	//}
-	//for rows.Next() {
-	//	var u user.User
-	//	err := rows.Scan(&u.ID, &u.Name, &u.Surname)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//	newUsers = append(newUsers, u)
-	//}
-	//if err := rows.Err(); err != nil {
-	//	return nil, err
-	//}
-	//err = tx.Commit(ctx)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//return newUsers, nil
+
 }
 
 func (s *UserStorage) DeleteUser(ctx context.Context, id int) (string, error) {

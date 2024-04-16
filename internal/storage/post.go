@@ -51,9 +51,7 @@ func (ps *PostStorage) ReadAllPosts(ctx context.Context) ([]post.Post, error) {
 	for rows.Next() {
 		var p post.Post
 		var u user.User
-		err := rows.Scan(&p.ID, &p.Photo, &p.CountLikes, &p.Body, &p.CreatedAt, &p.UploadedAt,
-			&u.ID, &u.Name, &u.Surname, &u.Photo,
-		)
+		err := rows.Scan(&p.ID, &p.Photo, &p.CountLikes, &p.Body, &p.CreatedAt, &p.UploadedAt, &u.ID, &u.Name, &u.Surname, &u.Photo)
 		if err != nil {
 			return nil, err
 		}

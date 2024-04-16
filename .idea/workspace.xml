@@ -5,39 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d0908c55-6673-4b56-a8dc-efb80597a2df" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/name.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/http/handlers/create_post.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/http/handlers/get_all_posts.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/http/handlers/get_likes_user_posts.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/http/handlers/get_post.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/http/handlers/refreshToken.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/http/handlers/set_like.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/http/handlers/sign_out.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/http/middleware/middleware.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/post/models.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/tokens/token.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/utils/utils.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/http/handlers/get_profile.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/956ddd1e-c4d0-4dfa-8d9f-491c5e196271.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/956ddd1e-c4d0-4dfa-8d9f-491c5e196271.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/956ddd1e-c4d0-4dfa-8d9f-491c5e196271/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/956ddd1e-c4d0-4dfa-8d9f-491c5e196271/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/http/handlers/delete_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/http/handlers/delete_user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/http/handlers/get_all_users.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/http/handlers/get_all_users.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/http/handlers/get_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/http/handlers/get_user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/http/handlers/route.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/http/handlers/handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/http/handlers/sign_in.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/http/handlers/sign_in.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/http/handlers/sign_up.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/http/handlers/sign_up.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/http/handlers/update_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/http/handlers/update_user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/postgres/postgres.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/storage/postgres/postgres.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/post/post_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/post/post_service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/http/handlers/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/http/handlers/handler.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/service/user/models.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/models.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/user_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/user_service.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/storage/post.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/storage/post.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/storage/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/storage/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/tokens/token.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/tokens/token.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,10 +34,23 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;kkkivannn&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/kkkivannn/vangram_api.git&quot;,
+    &quot;accountId&quot;: &quot;8908ee72-4b60-4e4b-bc56-8bfd559a33d7&quot;
+  }
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/go/go1.21.3/src/builtin/builtin.go" root0="SKIP_INSPECTION" />
     <setting file="file://$USER_HOME$/go/go1.21.3/src/context/context.go" root0="SKIP_INSPECTION" />
     <setting file="file://$USER_HOME$/go/go1.21.3/src/image/png/reader.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$USER_HOME$/go/go1.21.3/src/net/http/server.go" root0="SKIP_INSPECTION" />
     <setting file="file://$USER_HOME$/go/go1.21.3/src/runtime/panic.go" root0="SKIP_INSPECTION" />
     <setting file="file://$USER_HOME$/go/go1.21.3/src/runtime/proc.go" root0="SKIP_INSPECTION" />
     <setting file="file://$USER_HOME$/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go" root0="SKIP_INSPECTION" />
@@ -81,31 +73,32 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultGoTemplateProperty": "Go File",
-    "Go Build.go build vangram_api/cmd.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.automatic.dependencies.download": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "git-widget-placeholder": "master",
-    "go.import.settings.migrated": "true",
-    "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "/Users/kkkivannn/College/Diplom/vangram_api/assets",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;Go Build.go build vangram_api/cmd.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.automatic.dependencies.download&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/kkkivannn/College/Diplom/vangram_api&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/assets" />
@@ -137,11 +130,22 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-gosdk-2946fb9b3188-155fe4b6e3a0-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-233.15026.17" />
+        <option value="bundled-gosdk-33c477a475b1-b97fc8a1e17c-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-241.14494.238" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-GO-241.14494.238" />
       </set>
     </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d0908c55-6673-4b56-a8dc-efb80597a2df" name="Changes" comment="" />
+      <created>1712676632152</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1712676632152</updated>
+    </task>
+    <servers />
+  </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
