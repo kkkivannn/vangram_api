@@ -2,12 +2,13 @@ package handlers
 
 import (
 	"context"
+	"github.com/gin-gonic/gin"
 	"time"
 	"vangram_api/internal/http/middleware"
+	"vangram_api/internal/service/chat"
+	"vangram_api/internal/service/message"
 	"vangram_api/internal/service/post"
 	"vangram_api/internal/service/user"
-
-	"github.com/gin-gonic/gin"
 )
 
 type UserService interface {
@@ -31,14 +32,24 @@ type PostService interface {
 	GetLikesUsersPosts(ctx context.Context, userID int) ([]post.Post, error)
 }
 
-type Handler struct {
-	userService UserService
-	postService PostService
+type MessageService interface {
+	AddNewMessage(ctx context.Context, message message.CreateMessage) (int, error)
+	GetChatMessages(ctx context.Context, chatID int) ([]message.MessagesChat, error)
 }
 
-func New(userService UserService, postService PostService) *Handler {
-	return &Handler{userService: userService, postService: postService}
+type ChatService interface {
+	AddNewChat(ctx context.Context, chat chat.CreateChatModel) (int, error)
+}
 
+type Handler struct {
+	userService    UserService
+	postService    PostService
+	messageService MessageService
+	chatService    ChatService
+}
+
+func NewHandler(userService UserService, postService PostService, messageService MessageService, chatService ChatService) *Handler {
+	return &Handler{userService: userService, postService: postService, messageService: messageService, chatService: chatService}
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
@@ -46,7 +57,6 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router.Static("/image", "./")
 	api := router.Group("/api")
 	{
-		//Методы авторизации
 		auth := api.Group("/auth")
 		{
 			auth.POST("/send_number", h.sendNumber)
@@ -55,9 +65,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			auth.Use(middleware.Identity)
 			auth.POST("/signOut", h.signOut)
 		}
-		//Мидлваре для индетификации и проверки пользователя на авторизацию
-		api.Use(middleware.Identity)
-		//Методы для работы с пользователем
+		api.GET("/ws", h.connectToSocket)
+		//api.Use(middleware.Identity)
 		u := api.Group("/user")
 		{
 			u.GET("", h.getUser)
@@ -67,15 +76,20 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 		}
 		api.GET("/users", h.getAllUsers)
-		//Методы для работы с постами
-		post := api.Group("/post")
+		p := api.Group("/post", h.createPost)
 		{
-			post.POST("", h.createPost)
-			post.GET("", h.getPost)
-			post.POST("/like", h.setLike)
-			post.GET("/likes", h.getLikesUserPosts)
+			p.GET("", h.getPost)
+			p.POST("/like", h.setLike)
+			p.GET("/likes", h.getLikesUserPosts)
 		}
 		api.GET("/posts", h.getAllPosts)
+
+		c := api.Group("/chat")
+		{
+			c.POST("", h.createChat)
+			c.GET("/chats", h.getAllChats)
+			c.GET("/messages", h.getMessages)
+		}
 
 	}
 	return router

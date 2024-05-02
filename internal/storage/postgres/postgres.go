@@ -14,6 +14,8 @@ const (
 	UsersTokens   = `"Users_tokens"`
 	Post          = `"Post"`
 	LikeUsersPost = `"Like_users_post"`
+	Message       = `"Message"`
+	Chat          = `"Chat"`
 )
 
 func NewPostgresDB(context context.Context, config *config.Config) (pool *pgxpool.Pool, err error) {

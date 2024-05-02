@@ -10,6 +10,8 @@ import (
 	"vangram_api/internal/config"
 	"vangram_api/internal/http"
 	"vangram_api/internal/http/handlers"
+	"vangram_api/internal/service/chat"
+	"vangram_api/internal/service/message"
 	"vangram_api/internal/service/post"
 	"vangram_api/internal/service/user"
 	"vangram_api/internal/storage"
@@ -40,7 +42,13 @@ func main() {
 	postStorage := storage.NewPostStorage(db)
 	postService := post.NewService(postStorage)
 
-	route := handlers.New(userService, postService)
+	messageStorage := storage.NewMessageStorage(db)
+	messageService := message.NewMessageService(messageStorage)
+
+	chatStorage := storage.NewChatStorage(db)
+	chatService := chat.NewChatService(chatStorage)
+
+	route := handlers.NewHandler(userService, postService, messageService, chatService)
 
 	done := make(chan os.Signal, 1)
 
