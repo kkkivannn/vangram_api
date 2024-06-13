@@ -5,25 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d0908c55-6673-4b56-a8dc-efb80597a2df" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/internal/http/handlers/connect_to_socket.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/http/handlers/create_chat.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/http/handlers/get_messages.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/chat/chat_service.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/chat/models.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/message/message_service.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/message/models.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/storage/chat.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/storage/message.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/websocket/socket.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/http/handlers/create_friend.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/http/handlers/get_all_friends.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/http/handlers/get_users_posts.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/service/friends/friends_service.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/service/friends/models.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/storage/friends.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/956ddd1e-c4d0-4dfa-8d9f-491c5e196271.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/956ddd1e-c4d0-4dfa-8d9f-491c5e196271.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/956ddd1e-c4d0-4dfa-8d9f-491c5e196271.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/956ddd1e-c4d0-4dfa-8d9f-491c5e196271/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/956ddd1e-c4d0-4dfa-8d9f-491c5e196271/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/http/handlers/connect_to_socket.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/http/handlers/connect_to_socket.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/http/handlers/create_chat.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/http/handlers/create_chat.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/http/handlers/get_all_chats.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/http/handlers/get_all_chats.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/http/handlers/get_all_users.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/http/handlers/get_all_users.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/http/handlers/get_messages.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/http/handlers/get_messages.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/http/handlers/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/http/handlers/handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/chat/chat_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/chat/chat_service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/chat/models.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/chat/models.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/message/message_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/message/message_service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/message/models.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/message/models.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/post/post_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/post/post_service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user/models.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/models.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user/user_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/user_service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/storage/chat.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/storage/chat.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/storage/message.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/storage/message.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/storage/post.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/storage/post.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/storage/postgres/postgres.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/storage/postgres/postgres.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/storage/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/storage/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/tokens/token.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/tokens/token.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +51,7 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" url="file://$USER_HOME$/go/go1.21.3" />
+  <component name="GOROOT" url="file:///usr/local/go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -68,7 +82,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -81,32 +95,32 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
-    &quot;Go Build.go build vangram_api/cmd.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.automatic.dependencies.download&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/kkkivannn/College/Diplom/vangram_api&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.Color Scheme Font&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultGoTemplateProperty": "Go File",
+    "Go Build.go build vangram_api/cmd.executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.automatic.dependencies.download": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "git-widget-placeholder": "master",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/kkkivannn/College/Diplom/vangram_api",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/assets" />
@@ -138,8 +152,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-gosdk-33c477a475b1-e0158606a674-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-241.15989.157" />
-        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-GO-241.15989.157" />
+        <option value="bundled-gosdk-33c477a475b1-e0158606a674-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-241.17890.21" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-GO-241.17890.21" />
       </set>
     </attachedChunks>
   </component>

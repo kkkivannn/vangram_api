@@ -84,23 +84,75 @@ func (s *UserStorage) DeleteUser(ctx context.Context, id int) (string, error) {
 	return "User has been deleted", nil
 }
 
-func (s *UserStorage) GetAllUsers(ctx context.Context) ([]user.User, error) {
+func (s *UserStorage) GetAllUsers(ctx context.Context, userID int) ([]user.User, error) {
 	var users []user.User
-	query := fmt.Sprintf("SELECT id, name, surname FROM %s", postgres.User)
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return nil, err
+	}
+	query := fmt.Sprintf("SELECT id, name, surname, age, photo FROM %s", postgres.User)
 	rows, err := s.db.Query(ctx, query)
 	if err != nil {
+		err := tx.Rollback(ctx)
+		if err != nil {
+			return nil, err
+		}
 		return nil, err
 	}
 	for rows.Next() {
 		var user user.User
-		err := rows.Scan(&user.ID, &user.Name, &user.Surname)
+		err := rows.Scan(&user.ID, &user.Name, &user.Surname, &user.Age, &user.Photo)
 		if err != nil {
+			err := tx.Rollback(ctx)
+			if err != nil {
+				return nil, err
+			}
 			return nil, err
+		}
+		if user.Photo != nil {
+			photo := fmt.Sprintf("%s%s", url, *user.Photo)
+			user.Photo = &photo
 		}
 		users = append(users, user)
 	}
-
 	if err := rows.Err(); err != nil {
+		err := tx.Rollback(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return nil, err
+	}
+
+	queryFriends := fmt.Sprintf("SELECT friend_id as id FROM %s WHERE user_id=$1", postgres.Friends)
+	rowsFriends, err := s.db.Query(ctx, queryFriends, userID)
+	if err != nil {
+		err := tx.Rollback(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return nil, err
+	}
+	for rowsFriends.Next() {
+		var friend user.User
+		err := rowsFriends.Scan(&friend.ID)
+		if err != nil {
+			err := tx.Rollback(ctx)
+			if err != nil {
+				return nil, err
+			}
+			return nil, err
+		}
+		for index, user := range users {
+			if user.ID == friend.ID {
+				users[index].InFriends = true
+			}
+		}
+	}
+	if err := rowsFriends.Err(); err != nil {
+		err := tx.Rollback(ctx)
+		if err != nil {
+			return nil, err
+		}
 		return nil, err
 	}
 	return users, nil

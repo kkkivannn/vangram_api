@@ -10,6 +10,7 @@ type StoragePost interface {
 	CreatePost(ctx context.Context, post SavePost) (int, error)
 	ReadPost(ctx context.Context, postID int) (Post, error)
 	ReadAllPosts(ctx context.Context) ([]Post, error)
+	ReadUserPosts(ctx context.Context, userID int) ([]Post, error)
 	SetLike(ctx context.Context, postID int) error
 	AddLikesPost(ctx context.Context, postID, userID, userPostID int, likedAt time.Time) error
 	ReadLikesUserPosts(ctx context.Context, userID int) ([]Post, error)
@@ -62,4 +63,8 @@ func (s *Service) AddLikesPost(ctx context.Context, postID, userID, userPostID i
 
 func (s *Service) GetLikesUsersPosts(ctx context.Context, userID int) ([]Post, error) {
 	return s.storagePost.ReadLikesUserPosts(ctx, userID)
+}
+
+func (s *Service) GetUserPosts(ctx context.Context, userID int) ([]Post, error) {
+	return s.storagePost.ReadUserPosts(ctx, userID)
 }

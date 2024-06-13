@@ -14,7 +14,7 @@ type StorageUser interface {
 	ReadUserByNumber(ctx context.Context, number string) (int, error)
 	UpdateUser(ctx context.Context, user SaveUser, userId int) error
 	DeleteUser(ctx context.Context, id int) (string, error)
-	GetAllUsers(ctx context.Context) ([]User, error)
+	GetAllUsers(ctx context.Context, userID int) ([]User, error)
 	SetUserRefreshToken(ctx context.Context, token string, userId int, sessionId string) error
 	UpdateUserSession(ctx context.Context, sessionID string, userID int, oldRefreshToken string, newRefreshToken string) error
 	DeleteUserSession(ctx context.Context, sessionId string, userID int) error
@@ -73,8 +73,8 @@ func (s *ServiceUser) GetUser(ctx context.Context, userId int) (User, error) {
 	return s.storage.ReadUser(ctx, userId)
 }
 
-func (s *ServiceUser) GetAllUsers(ctx context.Context) ([]User, error) {
-	return s.storage.GetAllUsers(ctx)
+func (s *ServiceUser) GetAllUsers(ctx context.Context, userID int) ([]User, error) {
+	return s.storage.GetAllUsers(ctx, userID)
 }
 
 func (s *ServiceUser) GenerateTokens(ctx context.Context, number string) (Tokens, error) {

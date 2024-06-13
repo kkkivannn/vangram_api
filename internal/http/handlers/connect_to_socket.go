@@ -3,12 +3,22 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"log/slog"
+	"vangram_api/internal/http/middleware"
+	"vangram_api/internal/service/message"
+	ws "vangram_api/internal/websocket"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"log/slog"
-	"vangram_api/internal/service/message"
-	"vangram_api/internal/websocket"
 )
+
+var clients = make(map[*Client]bool)
+var broadcast = make(chan *socketMessage)
+
+type Client struct {
+	Conn   *websocket.Conn
+	UserID int
+}
 
 func (h *Handler) connectToSocket(ctx *gin.Context) {
 	socket := ws.New()
@@ -16,40 +26,77 @@ func (h *Handler) connectToSocket(ctx *gin.Context) {
 	if err != nil {
 		slog.Error(err.Error())
 	}
-	go receiver(ws, ctx, h)
+	userID, err := middleware.GetUserID(ctx)
+	if err != nil {
+		slog.Error(err.Error())
+		return
+	}
+
+	client := &Client{Conn: ws, UserID: userID}
+	clients[client] = true
+	go broadcastMessage(h, ctx)
+	fmt.Println("clients:", len(clients), clients, ws.RemoteAddr())
+	receiver(client)
+	delete(clients, client)
 }
 
-func receiver(ws *websocket.Conn, ctx *gin.Context, h *Handler) {
-	defer ws.Close()
+func receiver(client *Client) {
+	defer client.Conn.Close()
 	for {
-		_, p, err := ws.ReadMessage()
+		_, p, err := client.Conn.ReadMessage()
 		if err != nil {
 			slog.Error(err.Error())
+			return
 		}
 		var socketMessage socketMessage
 		err = json.Unmarshal(p, &socketMessage)
 		if err != nil {
 			slog.Error(err.Error())
-			ws.WriteJSON(map[string]interface{}{
+			err := client.Conn.WriteJSON(map[string]interface{}{
 				"error": "json parse error",
 			})
-			return
-		}
-		fmt.Sprintf("Received message: %q", socketMessage)
-		switch socketMessage.Type {
-		case "send_message":
-			id, err := h.messageService.AddNewMessage(ctx, socketMessage.Message)
 			if err != nil {
 				slog.Error(err.Error())
-				ws.WriteJSON(map[string]interface{}{
-					"error": "Send message error",
-				})
 				return
 			}
-			slog.Info(string(id))
-			ws.WriteJSON(map[string]interface{}{
-				"id": id,
-			})
+			return
+		}
+		broadcast <- &socketMessage
+		fmt.Println("host", client.Conn.RemoteAddr())
+	}
+}
+
+func broadcastMessage(h *Handler, ctx *gin.Context) {
+	for {
+		m := <-broadcast
+		for client := range clients {
+			userID, err := middleware.GetUserID(ctx)
+			if err != nil {
+				slog.Error(err.Error())
+				return
+			}
+			if client.UserID == m.Message.IDUser {
+				_, err := h.messageService.AddNewMessage(ctx, m.Message, userID)
+				if err != nil {
+					slog.Error(err.Error())
+					err := client.Conn.WriteJSON(map[string]interface{}{
+						"error": "Send message error",
+					})
+					if err != nil {
+						return
+					}
+					return
+				}
+				err = client.Conn.WriteJSON(m)
+				if err != nil {
+					slog.Error("Websocket error: %s", err)
+					err := client.Conn.Close()
+					if err != nil {
+						return
+					}
+					delete(clients, client)
+				}
+			}
 		}
 
 	}

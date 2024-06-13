@@ -5,8 +5,9 @@ import "time"
 type Message struct {
 	ID int `json:"id,omitempty" db:"id"`
 	//IDChat     int        `json:"id_chat,omitempty" db:"id_chat"`
-	//IDUser     int        `json:"id_user,omitempty" db:"id_user"`
+	IDUser     int        `json:"id_user,omitempty" db:"id_user"`
 	Body       string     `json:"body,omitempty" db:"body"`
+	IsMine     bool       `json:"is_mine"`
 	CreatedAt  time.Time  `json:"created_at,omitempty" db:"created_at"`
 	UploadedAt *time.Time `json:"uploaded_at,omitempty" db:"uploaded_at"`
 }
@@ -26,7 +27,7 @@ type SocketMessage struct {
 }
 
 type MessagesChat struct {
-	Messages Message     `json:"messages"`
+	Messages Message     `json:"message"`
 	User     UserMessage `json:"user"`
 }
 

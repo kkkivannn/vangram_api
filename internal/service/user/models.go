@@ -6,12 +6,13 @@ import (
 )
 
 type User struct {
-	ID      int     `json:"id,omitempty" db:"id"`
-	Name    string  `json:"name" db:"name"`
-	Surname string  `json:"surname" db:"surname"`
-	Age     int     `json:"age,omitempty"`
-	Phone   string  `json:"phone,omitempty"`
-	Photo   *string `json:"photo" db:"photo"`
+	ID        int     `json:"id,omitempty" db:"id"`
+	Name      string  `json:"name" db:"name"`
+	Surname   string  `json:"surname" db:"surname"`
+	Age       int     `json:"age"`
+	Phone     string  `json:"phone,omitempty"`
+	Photo     *string `json:"photo" db:"photo"`
+	InFriends bool    `json:"in_friends"`
 }
 
 type RequestUser struct {

@@ -43,7 +43,7 @@ func (ps *PostStorage) ReadPost(ctx context.Context, postID int) (post.Post, err
 
 func (ps *PostStorage) ReadAllPosts(ctx context.Context) ([]post.Post, error) {
 	var posts []post.Post
-	query := fmt.Sprintf("SELECT p.id, p.photo, p.count_likes, p.body, p.created_at, p.uploaded_at, u.id, u.name, u.surname, u.photo FROM %s p INNER JOIN %s u on p.id_user=u.id", postgres.Post, postgres.User)
+	query := fmt.Sprintf("SELECT p.id, p.photo, p.count_likes, p.body, p.created_at, p.uploaded_at, u.id, u.name, u.surname, u.photo FROM %s p INNER JOIN %s u on p.id_user=u.id ORDER BY p.created_at DESC", postgres.Post, postgres.User)
 	rows, err := ps.db.Query(ctx, query)
 	if err != nil {
 		return nil, err
@@ -57,6 +57,11 @@ func (ps *PostStorage) ReadAllPosts(ctx context.Context) ([]post.Post, error) {
 		}
 		p.Photo = fmt.Sprintf("%s%s", url, p.Photo)
 		p.User = u
+		if p.User.Photo != nil {
+			userPhoto := fmt.Sprintf("%s%s", url, *p.User.Photo)
+			p.User.Photo = &userPhoto
+		}
+
 		posts = append(posts, p)
 	}
 	return posts, nil
@@ -106,6 +111,35 @@ func (ps *PostStorage) ReadLikesUserPosts(ctx context.Context, userID int) ([]po
 		}
 		p.Photo = fmt.Sprintf("%s%s", url, p.Photo)
 		p.User = u
+		posts = append(posts, p)
+	}
+	return posts, nil
+}
+
+func (ps *PostStorage) ReadUserPosts(ctx context.Context, userID int) ([]post.Post, error) {
+	var posts []post.Post
+	query := fmt.Sprintf("SELECT p.id, p.photo, p.count_likes, p.body, p.created_at, p.uploaded_at, u.id, u.name, u.surname, u.photo, u.phone_number FROM %s p INNER JOIN %s u on u.id=p.id_user WHERE p.id_user=$1 ORDER BY p.created_at DESC", postgres.Post, postgres.User)
+	rows, err := ps.db.Query(ctx, query, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var p post.Post
+		var u user.User
+		err := rows.Scan(&p.ID, &p.Photo, &p.CountLikes, &p.Body, &p.CreatedAt, &p.UploadedAt,
+			&u.ID, &u.Name, &u.Surname, &u.Photo, &u.Phone,
+		)
+		if err != nil {
+			return nil, err
+		}
+		p.Photo = fmt.Sprintf("%s%s", url, p.Photo)
+		p.User = u
+		if p.User.Photo != nil {
+			userPhoto := fmt.Sprintf("%s%s", url, *p.User.Photo)
+			p.User.Photo = &userPhoto
+		}
+
 		posts = append(posts, p)
 	}
 	return posts, nil

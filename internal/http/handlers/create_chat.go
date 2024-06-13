@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log/slog"
 	"net/http"
+	"vangram_api/internal/http/middleware"
 	"vangram_api/internal/service/chat"
 )
 
@@ -15,6 +16,14 @@ func (h *Handler) createChat(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	userID, err := middleware.GetUserID(ctx)
+	if err != nil {
+		slog.Error(err.Error())
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	chat.IDUser = userID
 	id, err := h.chatService.AddNewChat(ctx, chat)
 	if err != nil {
 		slog.Error(err.Error())

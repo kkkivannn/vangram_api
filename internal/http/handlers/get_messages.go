@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log/slog"
 	"net/http"
+	"vangram_api/internal/http/middleware"
 )
 
 func (h *Handler) getMessages(ctx *gin.Context) {
@@ -13,8 +14,13 @@ func (h *Handler) getMessages(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	messages, err := h.messageService.GetChatMessages(ctx, r.IDChat)
+	userID, err := middleware.GetUserID(ctx)
+	if err != nil {
+		slog.Error(err.Error())
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	messages, err := h.messageService.GetChatMessages(ctx, r.IDChat, userID)
 	if err != nil {
 		slog.Error(err.Error())
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

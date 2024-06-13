@@ -6,6 +6,7 @@ import (
 	"time"
 	"vangram_api/internal/http/middleware"
 	"vangram_api/internal/service/chat"
+	"vangram_api/internal/service/friends"
 	"vangram_api/internal/service/message"
 	"vangram_api/internal/service/post"
 	"vangram_api/internal/service/user"
@@ -16,7 +17,7 @@ type UserService interface {
 	GetUser(ctx context.Context, id int) (user.User, error)
 	UpdateUser(ctx context.Context, user user.RequestUser, userId int) error
 	DeleteUser(ctx context.Context, id int) (string, error)
-	GetAllUsers(ctx context.Context) ([]user.User, error)
+	GetAllUsers(ctx context.Context, userID int) ([]user.User, error)
 	GetUserByNumber(ctx context.Context, number string) (user.User, error)
 	GenerateTokens(ctx context.Context, number string) (user.Tokens, error)
 	RefreshTokens(ctx context.Context, refreshToken string) (user.Tokens, error)
@@ -30,15 +31,22 @@ type PostService interface {
 	SetLikeToPost(ctx context.Context, postID int) error
 	AddLikesPost(ctx context.Context, postID, userID, userPostID int, likedAt time.Time) error
 	GetLikesUsersPosts(ctx context.Context, userID int) ([]post.Post, error)
+	GetUserPosts(ctx context.Context, userID int) ([]post.Post, error)
 }
 
 type MessageService interface {
-	AddNewMessage(ctx context.Context, message message.CreateMessage) (int, error)
-	GetChatMessages(ctx context.Context, chatID int) ([]message.MessagesChat, error)
+	AddNewMessage(ctx context.Context, message message.CreateMessage, senderID int) (int, error)
+	GetChatMessages(ctx context.Context, chatID int, userID int) ([]message.MessagesChat, error)
 }
 
 type ChatService interface {
 	AddNewChat(ctx context.Context, chat chat.CreateChatModel) (int, error)
+	GetAllChats(ctx context.Context) ([]chat.Chat, error)
+}
+
+type FriendService interface {
+	GetAllFriends(ctx context.Context, userID int) ([]friends.Friend, error)
+	AddNewFriend(ctx context.Context, userID, friendID int) error
 }
 
 type Handler struct {
@@ -46,10 +54,11 @@ type Handler struct {
 	postService    PostService
 	messageService MessageService
 	chatService    ChatService
+	friendService  FriendService
 }
 
-func NewHandler(userService UserService, postService PostService, messageService MessageService, chatService ChatService) *Handler {
-	return &Handler{userService: userService, postService: postService, messageService: messageService, chatService: chatService}
+func NewHandler(messageService MessageService, userService UserService, postService PostService, chatService ChatService, friendService FriendService) *Handler {
+	return &Handler{messageService: messageService, userService: userService, postService: postService, chatService: chatService, friendService: friendService}
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
@@ -65,24 +74,31 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			auth.Use(middleware.Identity)
 			auth.POST("/signOut", h.signOut)
 		}
+		api.Use(middleware.Identity)
 		api.GET("/ws", h.connectToSocket)
-		//api.Use(middleware.Identity)
 		u := api.Group("/user")
 		{
 			u.GET("", h.getUser)
 			u.DELETE("", h.deleteUser)
 			u.PATCH("", h.updateUser)
 			u.GET("/profile", h.getProfile)
+			u.GET("/friends", h.getAllFriends)
 
 		}
-		api.GET("/users", h.getAllUsers)
-		p := api.Group("/post", h.createPost)
+		users := api.Group("/users")
+		{
+			users.GET("", h.getAllUsers)
+			users.POST("", h.createFriend)
+		}
+		p := api.Group("/post")
 		{
 			p.GET("", h.getPost)
+			p.POST("", h.createPost)
 			p.POST("/like", h.setLike)
 			p.GET("/likes", h.getLikesUserPosts)
 		}
 		api.GET("/posts", h.getAllPosts)
+		api.GET("/users_posts", h.getUsersPosts)
 
 		c := api.Group("/chat")
 		{

@@ -12,7 +12,7 @@ const (
 	Salt                   = "dslkj932q90jdqos0219jd3fjreasokcmnurn4875678f"
 	AccessTokenSigningKey  = "WnRcez^SQQi_['q*3SJmR|5^P4-~ga"
 	RefreshTokenSigningKey = "LloVYPiV5km9FP}9>;Fvf}%(Z}B|]="
-	AccessTokenTTL         = 1 * time.Minute
+	AccessTokenTTL         = 50 * time.Minute
 	RefreshTokenTTL        = 720 * time.Hour
 )
 
